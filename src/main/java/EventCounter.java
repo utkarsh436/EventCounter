@@ -13,7 +13,6 @@ public class EventCounter {
 
     private int counter = 0;
     private List<LocalDateTime> timestamp = new ArrayList<>();
-    private List<Integer> count = new ArrayList<>();
 
     public EventCounter() {
     }
@@ -27,106 +26,47 @@ public class EventCounter {
     }
 
     /**
-     * Finds the appropriate location via
-     * binary search of where to insert
-     * the Timestamp in the timestamp
-     * list and then increments the overall
-     * counter by 1
-     *
-     * @param t Timestamp to insert
+     * Calculates the timestamp 5 mins ago from the current timestamp when
+     * function was invoked. Removes all the timestamp that came before the
+     * calculated timestamp of 5 mins ago and reduces the counter by 1.
+     * <p>
+     * Inserts the current timestamp and increases the count by 1;
      */
-    public void incrementCounter(LocalDateTime t) {
-        counter += 1;
-        if (timestamp.size() == 0) {
-            timestamp.add(t);
-            count.add(1);
-            return;
-        }
-        int idx = binarySearch(t);
+    public void incrementCounter() {
+        LocalDateTime currDateTime = LocalDateTime.now();
+        LocalDateTime fiveMinsAgo = currDateTime.minusMinutes(5);
 
-        if (idx == timestamp.size() - 1) {
-            if (timestamp.get(idx).compareTo(t) > 0) {
-                timestamp.add(idx, t);
-                count.add(idx, 1);
-            } else {
-                timestamp.add(t);
-                count.add(1);
+        for (LocalDateTime dateTime : timestamp) {
+            if (dateTime.isBefore(fiveMinsAgo)) {
+                timestamp.remove(dateTime);
+                counter--;
             }
-        } else {
-            timestamp.add(idx, t);
-            count.add(idx, 1);
         }
+        timestamp.add(currDateTime);
+        counter += 1;
     }
 
     /**
-     * Runs a binary search to find the index of the
-     * closest timestamp or the timestamp itself for
-     * the given start and end times.
-     * <p>
-     * Calculates the total given after the 2 indexes
-     * have been found and returns the total
+     * Checks to see if the start and end values are proper
+     * runs a loop from start to end  on the timestamp list
+     * inclusive and increments count by 1
      *
      * @param start the start of the user inputted timestamp
      * @param end   the end of the user inputted timestamp
-     * @return total count of events between the 2 inputs
+     * @return -1 if the range is greater than 5 minutes else
+     * returns the total count of events between the 2 inputs
      */
     public int returnCountOverTime(LocalDateTime start, LocalDateTime end) {
-
-//        Timestamp startTime = Timestamp.valueOf(start);
-//        Timestamp endTime = Timestamp.valueOf(end);
-
-        int startIdx = binarySearch(start);
-
-        int endIdx = rightMostElementBinarySearch(end);
-        int sum = 0;
-        for (int i = startIdx; i <= endIdx; i++) {
-            sum += count.get(i);
+        LocalDateTime fiveMins = start.plusMinutes(5);
+        if (end.isBefore(start) || end.isBefore(fiveMins)) {
+            return -1;
         }
-        return sum;
-    }
-
-    /**
-     * Binary Search implementation to return the index
-     * of the target timestamp in the timestamp list
-     *
-     * @param target the timestamp to search for in the list
-     * @return index of the target timestamp
-     */
-    private int binarySearch(LocalDateTime target) {
-
-        int left = 0;
-        int right = timestamp.size() - 1;
-        while (left < right) {
-            int mid = left + (right - left) / 2;
-            int val = timestamp.get(mid).compareTo(target);
-            if (val < 0) {
-                left = mid + 1;
-            } else right = mid;
-        }
-        return left;
-    }
-
-    /**
-     * Binary Search implementation to return the rightmost index
-     * of the target timestamp in the timestamp list.
-     *
-     * @param target the timestamp to search for in the list
-     * @return index of the target timestamp
-     */
-    private int rightMostElementBinarySearch(LocalDateTime target) {
-
-        int left = 0;
-        int right = timestamp.size() - 1;
-        while (left < right) {
-            int mid = left + (right - left) / 2;
-            int val = timestamp.get(mid).compareTo(target);
-            if (val > 0) {
-                right = mid;
-            } else {
-                left = mid + 1;
+        int total = 0;
+        for (LocalDateTime dateTime : timestamp) {
+            if (dateTime.equals(start) || dateTime.isAfter(start) || dateTime.equals(end) || dateTime.isBefore(end)) {
+                total += 1;
             }
         }
-        return right - 1;
+        return total;
     }
-
 }
