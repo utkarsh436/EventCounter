@@ -1,4 +1,4 @@
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -12,7 +12,7 @@ import java.util.*;
 public class EventCounter {
 
     private int counter = 0;
-    private List<Timestamp> timestamp = new ArrayList<>();
+    private List<LocalDateTime> timestamp = new ArrayList<>();
     private List<Integer> count = new ArrayList<>();
 
     public EventCounter() {
@@ -33,9 +33,9 @@ public class EventCounter {
      * list and then increments the overall
      * counter by 1
      *
-     * @param: Timestamp to insert
+     * @param t Timestamp to insert
      */
-    public void incrementCounter(Timestamp t) {
+    public void incrementCounter(LocalDateTime t) {
         counter += 1;
         if (timestamp.size() == 0) {
             timestamp.add(t);
@@ -70,14 +70,14 @@ public class EventCounter {
      * @param end   the end of the user inputted timestamp
      * @return total count of events between the 2 inputs
      */
-    public int returnCountOverTime(String start, String end) {
+    public int returnCountOverTime(LocalDateTime start, LocalDateTime end) {
 
-        Timestamp startTime = Timestamp.valueOf(start);
-        Timestamp endTime = Timestamp.valueOf(end);
+//        Timestamp startTime = Timestamp.valueOf(start);
+//        Timestamp endTime = Timestamp.valueOf(end);
 
-        int startIdx = binarySearch(startTime);
+        int startIdx = binarySearch(start);
 
-        int endIdx = rightMostElementBinarySearch(endTime);
+        int endIdx = rightMostElementBinarySearch(end);
         int sum = 0;
         for (int i = startIdx; i <= endIdx; i++) {
             sum += count.get(i);
@@ -92,7 +92,7 @@ public class EventCounter {
      * @param target the timestamp to search for in the list
      * @return index of the target timestamp
      */
-    private int binarySearch(Timestamp target) {
+    private int binarySearch(LocalDateTime target) {
 
         int left = 0;
         int right = timestamp.size() - 1;
@@ -113,7 +113,7 @@ public class EventCounter {
      * @param target the timestamp to search for in the list
      * @return index of the target timestamp
      */
-    private int rightMostElementBinarySearch(Timestamp target) {
+    private int rightMostElementBinarySearch(LocalDateTime target) {
 
         int left = 0;
         int right = timestamp.size() - 1;
