@@ -11,17 +11,18 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
-public class EventCounterTest{
+public class EventCounterTest {
 
     private EventCounter ecTest;
+
     @Before
-    public void setup(){
-        ecTest =  new EventCounter();
+    public void setup() {
+        ecTest = new EventCounter();
     }
 
 
     @Test
-    public void incrementCounterSize0Test(){
+    public void incrementCounterSize0Test() {
         String one = "2020-05-12 01:09:39.653";
         Timestamp t = Timestamp.valueOf(one);
         ecTest.incrementCounter(t);
@@ -29,7 +30,7 @@ public class EventCounterTest{
     }
 
     @Test
-    public void incrementCounter(){
+    public void incrementCounter() {
         String one = "2020-05-12 01:09:39.653";
         String two = "2020-05-12 02:09:39.653";
         String three = "2020-05-12 03:09:39.653";
@@ -49,7 +50,7 @@ public class EventCounterTest{
     }
 
     @Test
-    public void incrementCounterEndTest(){
+    public void incrementCounterEndTest() {
         String one = "2020-05-12 01:09:39.653";
         String two = "2020-05-12 02:09:39.653";
         String three = "2020-05-12 03:09:39.653";
@@ -71,7 +72,7 @@ public class EventCounterTest{
     }
 
     @Test
-    public void incrementCounterMiddleTest(){
+    public void incrementCounterMiddleTest() {
         String one = "2020-05-12 01:09:39.653";
         String two = "2020-05-12 02:09:39.653";
         String three = "2020-05-12 03:09:39.653";
@@ -94,7 +95,7 @@ public class EventCounterTest{
     }
 
     @Test
-    public void returnCountOverTimeTest(){
+    public void returnCountOverTimeTest() {
         String one = "2020-05-12 01:09:39.653";
         String two = "2020-05-12 02:09:39.653";
         String three = "2020-05-12 03:09:39.653";

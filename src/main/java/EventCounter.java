@@ -36,14 +36,12 @@ public class EventCounter {
      * @param: Timestamp to insert
      */
     public void incrementCounter(Timestamp t) {
-
+        counter += 1;
         if (timestamp.size() == 0) {
             timestamp.add(t);
             count.add(1);
-            counter += 1;
             return;
         }
-        counter += 1;
         int idx = binarySearch(t);
 
         if (idx == timestamp.size() - 1) {
