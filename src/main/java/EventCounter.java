@@ -1,30 +1,31 @@
 import java.sql.Timestamp;
 import java.util.*;
 
+/**
+ * The user of this class has the ability to keep track of how
+ * many events have taken in place in total and return the value
+ * back
+ * <p>
+ * They also have the ability to retrieve a count in between two
+ * seperate Timestamps
+ */
 public class EventCounter {
-    /**
-     * The user of this class has the ability to keep track of how
-     * many events have taken in place in total and return the value
-     * back
-     *
-     * They also have the ability to retrieve a count in between two
-     * seperate Timestamps
-     */
+
     private int counter = 0;
     private List<Timestamp> timestamp = new ArrayList<>();
     private List<Integer> count = new ArrayList<>();
 
-    public EventCounter(){
+    public EventCounter() {
     }
 
+    /**
+     * @return total count of all events
+     */
     public int getCounter() {
-        /**
-         * @return total count of all events
-         */
+
         return counter;
     }
 
-    public void incrementCounter(Timestamp t) {
     /**
      * Finds the appropriate location via
      * binary search of where to insert
@@ -34,7 +35,9 @@ public class EventCounter {
      *
      * @param: Timestamp to insert
      */
-        if(timestamp.size() == 0){
+    public void incrementCounter(Timestamp t) {
+
+        if (timestamp.size() == 0) {
             timestamp.add(t);
             count.add(1);
             counter += 1;
@@ -43,34 +46,34 @@ public class EventCounter {
         counter += 1;
         int idx = binarySearch(t);
 
-        if(idx == timestamp.size()-1){
-            if(timestamp.get(idx).compareTo(t) > 0){
+        if (idx == timestamp.size() - 1) {
+            if (timestamp.get(idx).compareTo(t) > 0) {
                 timestamp.add(idx, t);
                 count.add(idx, 1);
-            }else {
+            } else {
                 timestamp.add(t);
                 count.add(1);
             }
-        }
-        else{
+        } else {
             timestamp.add(idx, t);
             count.add(idx, 1);
         }
     }
 
-    public int returnCountOverTime(String start, String end){
-        /**
-         * Runs a binary search to find the index of the
-         * closest timestamp or the timestamp itself for
-         * the given start and end times.
-         *
-         * Calculates the total given after the 2 indexes
-         * have been found and returns the total
-         *
-         * @param start the start of the user inputted timestamp
-         * @param end the end of the user inputted timestamp
-         * @return total count of events between the 2 inputs
-         */
+    /**
+     * Runs a binary search to find the index of the
+     * closest timestamp or the timestamp itself for
+     * the given start and end times.
+     * <p>
+     * Calculates the total given after the 2 indexes
+     * have been found and returns the total
+     *
+     * @param start the start of the user inputted timestamp
+     * @param end   the end of the user inputted timestamp
+     * @return total count of events between the 2 inputs
+     */
+    public int returnCountOverTime(String start, String end) {
+
         Timestamp startTime = Timestamp.valueOf(start);
         Timestamp endTime = Timestamp.valueOf(end);
 
@@ -78,49 +81,50 @@ public class EventCounter {
 
         int endIdx = rightMostElementBinarySearch(endTime);
         int sum = 0;
-        for(int i = startIdx; i <=endIdx; i++){
+        for (int i = startIdx; i <= endIdx; i++) {
             sum += count.get(i);
         }
         return sum;
     }
 
-    private int binarySearch(Timestamp target){
-        /**
-         * Binary Search implementation to return the index
-         * of the target timestamp in the timestamp list
-         *
-         * @param target the timestamp to search for in the list
-         * @return index of the target timestamp
-         */
+    /**
+     * Binary Search implementation to return the index
+     * of the target timestamp in the timestamp list
+     *
+     * @param target the timestamp to search for in the list
+     * @return index of the target timestamp
+     */
+    private int binarySearch(Timestamp target) {
+
         int left = 0;
-        int right = timestamp.size()-1;
-        while(left < right){
-            int mid = left + (right - left) /2 ;
+        int right = timestamp.size() - 1;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
             int val = timestamp.get(mid).compareTo(target);
-            if(val < 0){
+            if (val < 0) {
                 left = mid + 1;
-            }
-            else right = mid;
+            } else right = mid;
         }
         return left;
     }
 
-    private int rightMostElementBinarySearch(Timestamp target){
-        /**
-         * Binary Search implementation to return the rightmost index
-         * of the target timestamp in the timestamp list.
-         *
-         * @param target the timestamp to search for in the list
-         * @return index of the target timestamp
-         */
+    /**
+     * Binary Search implementation to return the rightmost index
+     * of the target timestamp in the timestamp list.
+     *
+     * @param target the timestamp to search for in the list
+     * @return index of the target timestamp
+     */
+    private int rightMostElementBinarySearch(Timestamp target) {
+
         int left = 0;
-        int right = timestamp.size()-1;
-        while(left < right){
-            int mid = left + (right - left)/2;
+        int right = timestamp.size() - 1;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
             int val = timestamp.get(mid).compareTo(target);
-            if(val > 0){
+            if (val > 0) {
                 right = mid;
-            } else{
+            } else {
                 left = mid + 1;
             }
         }
