@@ -6,19 +6,13 @@ public class main {
         LocalDateTime myDateObj = LocalDateTime.now();
         System.out.println("Before formatting: " + myDateObj.toString());
 
-        LocalDateTime one = LocalDateTime.parse("2020-05-12T01:09:39.653");
-        LocalDateTime two = LocalDateTime.parse("2020-05-12T02:09:39.653");
-        LocalDateTime three = LocalDateTime.parse("2020-05-12T03:09:39.653");
-        LocalDateTime four = LocalDateTime.parse("2020-05-12T04:09:39.653");
-        LocalDateTime five = LocalDateTime.parse("2020-05-12T05:09:39.653");
+        LocalDateTime one = LocalDateTime.parse("2020-05-12T01:00:39.653");
+        LocalDateTime two = LocalDateTime.parse("2020-05-12T01:01:39.653");
+        LocalDateTime three = LocalDateTime.parse("2020-05-12T01:02:39.653");
+        LocalDateTime four = LocalDateTime.parse("2020-05-12T01:03:39.653");
+        LocalDateTime five = LocalDateTime.parse("2020-05-12T01:04:39.653");
 
         EventCounter ec = new EventCounter();
-
-        ec.incrementCounter(one);
-        ec.incrementCounter(two);
-        ec.incrementCounter(three);
-        ec.incrementCounter(four);
-        ec.incrementCounter(five);
 
         System.out.println(ec.getCounter());
 

@@ -25,6 +25,12 @@ public class EventCounter {
         return counter;
     }
 
+    public void incrementCounter(){
+        LocalDateTime currDateTime = LocalDateTime.now();
+        incrementCounter(currDateTime);
+    }
+
+
     /**
      * Calculates the timestamp 5 mins ago from the current timestamp when
      * function was invoked. Removes all the timestamp that came before the
@@ -32,19 +38,33 @@ public class EventCounter {
      * <p>
      * Inserts the current timestamp and increases the count by 1;
      */
-    public void incrementCounter() {
-        LocalDateTime currDateTime = LocalDateTime.now();
+    public void incrementCounter(LocalDateTime currDateTime) {
+//        LocalDateTime currDateTime = LocalDateTime.now();
         LocalDateTime fiveMinsAgo = currDateTime.minusMinutes(5);
-
-        for (LocalDateTime dateTime : timestamp) {
-            if (dateTime.isBefore(fiveMinsAgo)) {
-                timestamp.remove(dateTime);
+//        pruneList(currDateTime);
+        for(int i = 0; i < timestamp.size(); i++){
+            LocalDateTime dateTime = timestamp.get(i);
+            if(dateTime.isBefore(fiveMinsAgo)){
+                timestamp.remove(i);
                 counter--;
             }
         }
+
         timestamp.add(currDateTime);
         counter += 1;
     }
+
+//    public void pruneList(LocalDateTime currDateTime){
+//        LocalDateTime fiveMinsAgo = currDateTime.minusMinutes(5);
+//        for(int i = 0; i < timestamp.size(); i++){
+//            LocalDateTime dateTime = timestamp.get(i);
+//            if(dateTime.isBefore(fiveMinsAgo)){
+//                timestamp.remove(i);
+//                counter--;
+//            }
+//        }
+//    }
+
 
     /**
      * Checks to see if the start and end values are proper
