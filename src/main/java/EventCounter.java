@@ -1,4 +1,6 @@
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -11,82 +13,78 @@ import java.util.*;
  */
 public class EventCounter {
 
-    private int counter = 0;
-    private List<LocalDateTime> timestamp = new ArrayList<>();
+    private List<LocalTime> timestamp = new ArrayList<>();
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public EventCounter() {
     }
 
     /**
-     * @return total count of all events
+     * Inserts a timestamp into the list based on the current time
+     *
      */
-    public int getCounter() {
-
-        return counter;
-    }
-
-    public void incrementCounter(){
-        LocalDateTime currDateTime = LocalDateTime.now();
-        incrementCounter(currDateTime);
+    public void incrementCounter() {
+        LocalTime currTime = LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        incrementCounter(currTime);
     }
 
 
     /**
-     * Calculates the timestamp 5 mins ago from the current timestamp when
-     * function was invoked. Removes all the timestamp that came before the
-     * calculated timestamp of 5 mins ago and reduces the counter by 1.
-     * <p>
-     * Inserts the current timestamp and increases the count by 1;
+     * Inserts a timestamp into the list speicifed by user after
+     * Pruning the list to remove timestamps that were over 5 mins
+     * ago
+     * @param currDateTime user specified timestamp to insert
      */
-    public void incrementCounter(LocalDateTime currDateTime) {
-//        LocalDateTime currDateTime = LocalDateTime.now();
-        LocalDateTime fiveMinsAgo = currDateTime.minusMinutes(5);
-//        pruneList(currDateTime);
-        for(int i = 0; i < timestamp.size(); i++){
-            LocalDateTime dateTime = timestamp.get(i);
-            if(dateTime.isBefore(fiveMinsAgo)){
+    public void incrementCounter(LocalTime currDateTime) {
+        LocalTime fiveMinsAgo = LocalTime.parse(currDateTime.minusMinutes(5).format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        for (int i = 0; i < timestamp.size(); i++) {
+            LocalTime dateTime = timestamp.get(i);
+            if (dateTime.isBefore(fiveMinsAgo)) {
                 timestamp.remove(i);
-                counter--;
             }
         }
-
         timestamp.add(currDateTime);
-        counter += 1;
     }
-
-//    public void pruneList(LocalDateTime currDateTime){
-//        LocalDateTime fiveMinsAgo = currDateTime.minusMinutes(5);
-//        for(int i = 0; i < timestamp.size(); i++){
-//            LocalDateTime dateTime = timestamp.get(i);
-//            if(dateTime.isBefore(fiveMinsAgo)){
-//                timestamp.remove(i);
-//                counter--;
-//            }
-//        }
-//    }
-
 
     /**
      * Checks to see if the start and end values are proper
      * runs a loop from start to end  on the timestamp list
      * inclusive and increments count by 1
      *
-     * @param start the start of the user inputted timestamp
-     * @param end   the end of the user inputted timestamp
+     * @param seconds how many seconds ago from now we need to
+     *                start from
      * @return -1 if the range is greater than 5 minutes else
      * returns the total count of events between the 2 inputs
      */
-    public int returnCountOverTime(LocalDateTime start, LocalDateTime end) {
-        LocalDateTime fiveMins = start.plusMinutes(5);
-        if (end.isBefore(start) || end.isBefore(fiveMins)) {
-            return -1;
-        }
-        int total = 0;
-        for (LocalDateTime dateTime : timestamp) {
-            if (dateTime.equals(start) || dateTime.isAfter(start) || dateTime.equals(end) || dateTime.isBefore(end)) {
-                total += 1;
-            }
-        }
+    public int returnCountOverTime(int seconds) {
+        if (seconds > 300) return -1;
+        LocalTime startTime = LocalTime.parse(LocalDateTime.now().minusSeconds(seconds).format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        int startIdx = binarySearch(startTime);
+        int total = timestamp.size() - startIdx;
         return total;
+    }
+
+
+    /**
+     * Locates the index of the timestamp closest to the
+     * target or the target itself
+     *
+     * @param target
+     * @return index of the target or closest index greater
+     * than the target
+     */
+
+    private int binarySearch(LocalTime target){
+        int left = 0;
+        int right = timestamp.size()-1;
+        while(left < right){
+            int mid = left + (right - left) /2 ;
+            int val = timestamp.get(mid).compareTo(target);
+            if(val < 0){
+                left = mid + 1;
+            }
+            else right = mid;
+        }
+        return left;
     }
 }
