@@ -14,7 +14,7 @@ import java.util.*;
 public class EventCounter {
 
     private List<LocalTime> timestamp = new ArrayList<>();
-
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     public EventCounter() {
     }
 
@@ -23,7 +23,7 @@ public class EventCounter {
      *
      */
     public void incrementCounter() {
-        LocalTime currTime = LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        LocalTime currTime = LocalTime.parse(LocalTime.now().format(formatter));
         incrementCounter(currTime);
     }
 
@@ -35,8 +35,7 @@ public class EventCounter {
      * @param currDateTime user specified timestamp to insert
      */
     public void incrementCounter(LocalTime currDateTime) {
-        LocalTime fiveMinsAgo = LocalTime.parse(currDateTime.minusMinutes(5)
-                .format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        LocalTime fiveMinsAgo = LocalTime.parse(currDateTime.minusMinutes(5).format(formatter));
         for (int i = 0; i < timestamp.size(); i++) {
             LocalTime dateTime = timestamp.get(i);
             if (dateTime.isBefore(fiveMinsAgo)) {
@@ -55,12 +54,11 @@ public class EventCounter {
      *
      * @param seconds  how many seconds ago from now we need to start from
      * @return the total count over the user input to current time
-     * @throws Exception
+     * @throws IllegalArgumentException
      */
     public int getCountOverTime(int seconds) throws Exception {
-        if (seconds > 300) throw new Exception("Invalid Time");
-        LocalTime startTime = LocalTime.parse(LocalDateTime.now().minusSeconds(seconds)
-                .format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        if (seconds > 300) throw new IllegalArgumentException ("Invalid Time");
+        LocalTime startTime = LocalTime.parse(LocalDateTime.now().minusSeconds(seconds).format(formatter));
         int startIdx = findNearestIndex(startTime);
         int total = timestamp.size() - startIdx;
         return total;

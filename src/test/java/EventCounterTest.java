@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class EventCounterTest {
 
     private EventCounter ecTest;
+    private DateTimeFormatter formatter;
 
     @Rule
     public ExpectedException exceptionRule = ExpectedException.none();
@@ -24,6 +25,7 @@ public class EventCounterTest {
     @Before
     public void setup() {
         ecTest = new EventCounter();
+        formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     }
 
 
@@ -37,8 +39,7 @@ public class EventCounterTest {
 
     @Test
     public void incrementCounterPruneTest() throws Exception {
-        LocalTime temp = LocalTime.parse(LocalTime.now().minusSeconds(400)
-                .format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        LocalTime temp = LocalTime.parse(LocalTime.now().minusSeconds(400).format(formatter));
         ecTest.incrementCounter(temp);
         ecTest.incrementCounter();
         ecTest.incrementCounter();
@@ -48,13 +49,10 @@ public class EventCounterTest {
 
     @Test
     public void incrementCounteruserInputtedTimestamps() throws Exception {
-        LocalTime one = LocalTime.parse(LocalTime.now().minusSeconds(3)
-                .format(DateTimeFormatter.ofPattern("HH:mm:ss")));
-        LocalTime two = LocalTime.parse(LocalTime.now().minusSeconds(2)
-                .format(DateTimeFormatter.ofPattern("HH:mm:ss")));
-        LocalTime three = LocalTime.parse(LocalTime.now().minusSeconds(1)
-                .format(DateTimeFormatter.ofPattern("HH:mm:ss")));
-        LocalTime four = LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        LocalTime one = LocalTime.parse(LocalTime.now().minusSeconds(3).format(formatter));
+        LocalTime two = LocalTime.parse(LocalTime.now().minusSeconds(2).format(formatter));
+        LocalTime three = LocalTime.parse(LocalTime.now().minusSeconds(1).format(formatter));
+        LocalTime four = LocalTime.parse(LocalTime.now().format(formatter));
         ecTest.incrementCounter(one);
         ecTest.incrementCounter(two);
         ecTest.incrementCounter(three);
@@ -64,6 +62,11 @@ public class EventCounterTest {
 
     @Test
     public void getCountOverTimeExceptionTest(){
-       assertThrows(Exception.class, () -> ecTest.getCountOverTime(400));
+       assertThrows(IllegalArgumentException.class, () -> ecTest.getCountOverTime(400));
+    }
+
+    @Test
+    public void getCountOverTimeEmptyList() throws Exception {
+        assertEquals(0, ecTest.getCountOverTime(0));
     }
 }
