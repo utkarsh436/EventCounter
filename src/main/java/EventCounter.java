@@ -56,7 +56,7 @@ public class EventCounter {
      * @return the total count over the user input to current time
      * @throws IllegalArgumentException
      */
-    public int getCountOverTime(int seconds) throws Exception {
+    public int getCountOverTime(int seconds){
         if (seconds > 300) throw new IllegalArgumentException ("Invalid Time");
         LocalTime startTime = LocalTime.parse(LocalDateTime.now().minusSeconds(seconds).format(formatter));
         int startIdx = findNearestIndex(startTime);
