@@ -36,7 +36,8 @@ public class EventCounter {
      * @param currDateTime user specified timestamp to insert
      */
     public void incrementCounter(LocalTime currDateTime) {
-        LocalTime fiveMinsAgo = LocalTime.parse(currDateTime.minusMinutes(5).format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        LocalTime fiveMinsAgo = LocalTime.parse(currDateTime.minusMinutes(5)
+                .format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         for (int i = 0; i < timestamp.size(); i++) {
             LocalTime dateTime = timestamp.get(i);
             if (dateTime.isBefore(fiveMinsAgo)) {
@@ -58,7 +59,8 @@ public class EventCounter {
      */
     public int returnCountOverTime(int seconds) {
         if (seconds > 300) return -1;
-        LocalTime startTime = LocalTime.parse(LocalDateTime.now().minusSeconds(seconds).format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        LocalTime startTime = LocalTime.parse(LocalDateTime.now().minusSeconds(seconds)
+                .format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         int startIdx = binarySearch(startTime);
         int total = timestamp.size() - startIdx;
         return total;
@@ -67,7 +69,7 @@ public class EventCounter {
 
     /**
      * Locates the index of the timestamp closest to the
-     * target or the target itself
+     * target or the target itself using binary search
      *
      * @param target
      * @return index of the target or closest index greater

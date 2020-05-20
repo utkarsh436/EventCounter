@@ -33,8 +33,9 @@ public class EventCounterTest {
     }
 
     @Test
-    public void incrementCounterPruneTest(){
-        LocalTime temp = LocalTime.parse(LocalTime.now().minusSeconds(400).format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+    public void incrementCounterPruneTest() {
+        LocalTime temp = LocalTime.parse(LocalTime.now().minusSeconds(400)
+                .format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         ecTest.incrementCounter(temp);
         ecTest.incrementCounter();
         ecTest.incrementCounter();
@@ -43,10 +44,13 @@ public class EventCounterTest {
     }
 
     @Test
-    public void incrementCounterWithEvenTimestamps(){
-        LocalTime one = LocalTime.parse(LocalTime.now().minusSeconds(3).format(DateTimeFormatter.ofPattern("HH:mm:ss")));
-        LocalTime two = LocalTime.parse(LocalTime.now().minusSeconds(2).format(DateTimeFormatter.ofPattern("HH:mm:ss")));
-        LocalTime three = LocalTime.parse(LocalTime.now().minusSeconds(1).format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+    public void incrementCounterWithEvenTimestamps() {
+        LocalTime one = LocalTime.parse(LocalTime.now().minusSeconds(3)
+                .format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        LocalTime two = LocalTime.parse(LocalTime.now().minusSeconds(2)
+                .format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        LocalTime three = LocalTime.parse(LocalTime.now().minusSeconds(1)
+                .format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         LocalTime four = LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         ecTest.incrementCounter(one);
         ecTest.incrementCounter(two);
