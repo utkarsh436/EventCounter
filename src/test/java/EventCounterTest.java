@@ -1,22 +1,25 @@
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.Assert.*;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
-import static java.lang.Thread.sleep;
+
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class EventCounterTest {
 
     private EventCounter ecTest;
+
+    @Rule
+    public ExpectedException exceptionRule = ExpectedException.none();
 
     @Before
     public void setup() {
@@ -25,7 +28,7 @@ public class EventCounterTest {
 
 
     @Test
-    public void incrementCounterTest() {
+    public void incrementCounterTest() throws Exception {
         ecTest.incrementCounter();
         ecTest.incrementCounter();
         ecTest.incrementCounter();
@@ -33,7 +36,7 @@ public class EventCounterTest {
     }
 
     @Test
-    public void incrementCounterPruneTest() {
+    public void incrementCounterPruneTest() throws Exception {
         LocalTime temp = LocalTime.parse(LocalTime.now().minusSeconds(400)
                 .format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         ecTest.incrementCounter(temp);
@@ -44,7 +47,7 @@ public class EventCounterTest {
     }
 
     @Test
-    public void incrementCounterWithEvenTimestamps() {
+    public void incrementCounteruserInputtedTimestamps() throws Exception {
         LocalTime one = LocalTime.parse(LocalTime.now().minusSeconds(3)
                 .format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         LocalTime two = LocalTime.parse(LocalTime.now().minusSeconds(2)
@@ -59,5 +62,8 @@ public class EventCounterTest {
         assertEquals(2, ecTest.getCountOverTime(1));
     }
 
-
+    @Test
+    public void getCountOverTimeExceptionTest(){
+       assertThrows(Exception.class, () -> ecTest.getCountOverTime(400));
+    }
 }

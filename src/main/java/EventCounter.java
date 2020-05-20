@@ -41,6 +41,8 @@ public class EventCounter {
             LocalTime dateTime = timestamp.get(i);
             if (dateTime.isBefore(fiveMinsAgo)) {
                 timestamp.remove(i);
+            } else{
+                break;
             }
         }
         timestamp.add(currDateTime);
@@ -51,13 +53,12 @@ public class EventCounter {
      * runs a loop from start to end  on the timestamp list
      * inclusive and increments count by 1
      *
-     * @param seconds how many seconds ago from now we need to
-     *                start from
-     * @return -1 if the range is greater than 5 minutes else
-     * returns the total count of events between the 2 inputs
+     * @param seconds  how many seconds ago from now we need to start from
+     * @return the total count over the user input to current time
+     * @throws Exception
      */
-    public int getCountOverTime(int seconds) {
-        if (seconds > 300) return -1;
+    public int getCountOverTime(int seconds) throws Exception {
+        if (seconds > 300) throw new Exception("Invalid Time");
         LocalTime startTime = LocalTime.parse(LocalDateTime.now().minusSeconds(seconds)
                 .format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         int startIdx = findNearestIndex(startTime);
