@@ -14,7 +14,6 @@ import java.util.*;
 public class EventCounter {
 
     private List<LocalTime> timestamp = new ArrayList<>();
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public EventCounter() {
     }
@@ -57,11 +56,11 @@ public class EventCounter {
      * @return -1 if the range is greater than 5 minutes else
      * returns the total count of events between the 2 inputs
      */
-    public int returnCountOverTime(int seconds) {
+    public int getCountOverTime(int seconds) {
         if (seconds > 300) return -1;
         LocalTime startTime = LocalTime.parse(LocalDateTime.now().minusSeconds(seconds)
                 .format(DateTimeFormatter.ofPattern("HH:mm:ss")));
-        int startIdx = binarySearch(startTime);
+        int startIdx = findNearestIndex(startTime);
         int total = timestamp.size() - startIdx;
         return total;
     }
@@ -76,7 +75,7 @@ public class EventCounter {
      * than the target
      */
 
-    private int binarySearch(LocalTime target){
+    private int findNearestIndex(LocalTime target){
         int left = 0;
         int right = timestamp.size()-1;
         while(left < right){

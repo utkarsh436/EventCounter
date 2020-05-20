@@ -29,7 +29,7 @@ public class EventCounterTest {
         ecTest.incrementCounter();
         ecTest.incrementCounter();
         ecTest.incrementCounter();
-        assertEquals(3, ecTest.returnCountOverTime(3));
+        assertEquals(3, ecTest.getCountOverTime(3));
     }
 
     @Test
@@ -39,7 +39,7 @@ public class EventCounterTest {
         ecTest.incrementCounter(temp);
         ecTest.incrementCounter();
         ecTest.incrementCounter();
-        assertEquals(2, ecTest.returnCountOverTime(2));
+        assertEquals(2, ecTest.getCountOverTime(2));
 
     }
 
@@ -56,7 +56,7 @@ public class EventCounterTest {
         ecTest.incrementCounter(two);
         ecTest.incrementCounter(three);
         ecTest.incrementCounter(four);
-        assertEquals(2, ecTest.returnCountOverTime(1));
+        assertEquals(2, ecTest.getCountOverTime(1));
     }
 
 
